@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WPM Calculator</title>
+</head>
+<body>
+	<h1>WPM Calculator</h1>
+	<p>Type the following passage:</p>
+	<p id="passage">The quick brown fox jumps over the lazy dog.</p>
+	<input type="text" id="input">
+	<button onclick="calculateWPM()">Calculate WPM</button>
+	<p id="wpm"></p>
+	<p id="tips"></p>
+	<label><input type="checkbox" id="listen"> Listen and Type</label>
+	<button onclick="toggleListen()">Start Listening</button>
+
+	<script>
+		let start, end, wordsTyped, accuracy;
+		let listenMode = false;
+		const passage = document.getElementById('passage').textContent.split(' ');
+
+		function calculateWPM() {
+			end = new Date().getTime();
+			const time = (end - start) / 1000; // time in seconds
+			wordsTyped = document.getElementById('input').value.trim().split(' ').length;
+			const wpm = Math.round((wordsTyped / time) * 60);
+			accuracy = calculateAccuracy();
+			document.getElementById('wpm').textContent = `WPM: ${wpm} (Accuracy: ${accuracy}%)`;
+			provideTips(wpm, accuracy);
+		}
+
+		function calculateAccuracy() {
+			const inputWords = document.getElementById('input').value.trim().split(' ');
+			let numCorrect = 0;
+			for (let i = 0; i < inputWords.length; i++) {
+				if (inputWords[i] === passage[i]) {
+					numCorrect++;
+				}
+			}
+			return Math.round((numCorrect / passage.length) * 100);
+		}
+
+		function provideTips(wpm, accuracy) {
+			let tips = '';
+			if (wpm < 40) {
+				tips += 'You might benefit from practicing touch typing or using a typing tutor program.';
+			}
+			if (accuracy < 90) {
+				tips += 'Try to slow down and focus on accuracy to avoid making mistakes.';
+			}
+			document.getElementById('tips').textContent = tips;
+		}
+
+		function toggleListen() {
+			if (listenMode) {
+				document.getElementById('listen').disabled = false;
+				listenMode = false;
+			} else {
+				document.getElementById('listen').disabled = true;
+				startListening();
+			}
+		}
+
+		function startListening() {
+			const recognition = new webkitSpeechRecognition();
+			recognition.continuous = true;
+			recognition.interimResults = true;
+
+			recognition.onresult = function(event) {
+				let transcript = '';
+				for (let i = event.resultIndex; i < event.results.length; i++) {
+					if (event.results[i].isFinal) {
+						transcript += event.results[i][0].transcript;
+					}
+				}
+				document.getElementById('input').value = transcript;
+			};
+
+			recognition.onend = function() {
+				document.getElementById('listen').disabled = false;
+				listenMode = false;
+				calculateWPM();
+			};
+
+			start = new Date().getTime();
+			recognition.start();
+			listenMode = true;
+		}
+	</script>
+</body>
+</html>
