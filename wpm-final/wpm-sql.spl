@@ -1,0 +1,80 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Mar 15, 2023 at 06:48 PM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 7.4.29
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `wpm`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userDetails`
+--
+
+CREATE TABLE `userDetails` (
+  `userId` varchar(500) NOT NULL,
+  `userName` varchar(25) NOT NULL,
+  `userEmail` varchar(50) NOT NULL,
+  `userPassword` varchar(500) NOT NULL,
+  `userDOC` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `userDetails`
+--
+
+INSERT INTO `userDetails` (`userId`, `userName`, `userEmail`, `userPassword`, `userDOC`) VALUES
+('0b5ab692b60004d9843f4d7b01056ff482d4f147d', 'test', 'test@wpm.com', 'sdsads', '2023-03-15 22:35:36'),
+('c61651096fe0ee2426d207dcfb2450c82d4f147d', 'admin', 'admin@wpm.com', 'sdsads', '2023-03-15 22:35:14');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userPerformance`
+--
+
+CREATE TABLE `userPerformance` (
+  `sessionID` varchar(500) NOT NULL,
+  `userId` varchar(500) NOT NULL,
+  `testStartTime` datetime NOT NULL,
+  `finishDuration` varchar(50) NOT NULL,
+  `testDOC` datetime NOT NULL DEFAULT current_timestamp(),
+  `testType` enum('TYPING','LISTENING') NOT NULL DEFAULT 'TYPING'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `userDetails`
+--
+ALTER TABLE `userDetails`
+  ADD PRIMARY KEY (`userId`,`userEmail`);
+
+--
+-- Indexes for table `userPerformance`
+--
+ALTER TABLE `userPerformance`
+  ADD PRIMARY KEY (`sessionID`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
