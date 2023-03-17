@@ -50,7 +50,6 @@ $SP_User = $res1->fetch();
     <title>WPM - Home Page</title>
 </head>
 
-
 <body>
     <?php require('navbar.php'); ?>
     <br />
@@ -58,17 +57,24 @@ $SP_User = $res1->fetch();
         <div class="row">
             <div class="alert  alert-info">
                 <h3 class="text-success">
-                    Welcome Buddy !
+                    Welcome,
+                    <?php echo strtoupper($SP_User["userName"]); ?> !
                 </h3>
             </div>
-            <hr />
         </div>
         <br />
-        <br />
-        <div class="">
-            <h1></h1>
+        <div class="row">
+            <div class="col-sm-12 p-4 my-3" style="background-color: gray;">
+            </div>
+            <div class="col-sm-12" style="display: flex;">
+                <div class="col-sm-6">
+                    <div id="questionSection" class="editor"></div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="typingSection" class="editor" contenteditable="true"></div>
+                </div>
+            </div>
         </div>
-        <br />
         <br />
         <div class="row" style="display: block;">
             <h1>FAQ</h1>

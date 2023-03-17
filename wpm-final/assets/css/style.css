@@ -91,3 +91,10 @@ a, a:hover{
     font-weight: 600;
     text-decoration-line: none;
 }
+
+.editor {
+    height: 45vh;
+    min-height: 45vh;
+    border: 1px solid black;
+    overflow: scroll;
+}
