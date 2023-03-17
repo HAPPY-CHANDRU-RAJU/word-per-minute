@@ -4,13 +4,13 @@ session_start();
 require_once 'dbconnect.php';
 
 if (!isset($_SESSION['user_session'])) {
-  header("Location: login.php");
-  exit;
+    header("Location: login.php");
+    exit;
 }
-
+global $conn;
 $emid = $_SESSION['user_session'];
 
-$ql1 = "SELECT * FROM `userDetails` WHERE `userId`='$emid'";
+$sql1 = "SELECT * FROM `userDetails` WHERE `userId`='$emid'";
 $res1 = $conn->prepare($sql1);
 $res1->execute();
 $SP_User = $res1->fetch();
@@ -45,69 +45,31 @@ $SP_User = $res1->fetch();
         src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js">
     </script>
     <script src="assets/js/script.js"></script>
-
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="icon" href="assets/image/logo.png">
-    <title>Login - </title>
+    <title>WPM - Home Page</title>
 </head>
 
 
 <body>
     <?php require('navbar.php'); ?>
+    <br />
     <div class="container">
         <div class="row">
-            <div class="">
-                <form action="<?php echo $LOGIN_PATH; ?>" method="post">
-                    <?php
-          if (isset($errMSG)) {
-            ?>
-                    <div class="form-group">
-                        <div class="alert alert-<?php echo $stat; ?>">
-                            <span class="glyphicon glyphicon-info-sign"></span>
-                            <?php echo $errMSG; ?>
-                        </div>
-                    </div>
-                    <?php
-          }
-          ?>
-                    <img src="assets/image/logo-rct.png" style="height: 50px;margin-bottom: 15px;" />
-
-                    <div class="form-group">
-                        <div class="input-group">
-                            <!-- <span class="input-group-addon"><span class="fa fa-envelope"></span></span> -->
-                            <input type="email" name="email" class="form-control" placeholder="Your Email"
-                                value="<?php echo $email; ?>" maxlength="40" required />
-                        </div>
-                        <span class="text-danger xs-font">
-                            <?php echo $emailError; ?>
-                        </span>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="input-group">
-                            <!-- <span class="input-group-addon"><span class="fa fa-lock"></span></span> -->
-                            <input type="password" name="pass" class="form-control" placeholder="Your Password"
-                                maxlength="15" required />
-                        </div>
-                        <span class="text-danger xs-font">
-                            <?php echo $passError; ?>
-                        </span>
-                    </div>
-                    <div class="form-group small clearfix">
-                        <label class="checkbox-inline"><input type="checkbox"> Remember me</label>
-                        <a href="#" class="forgot-link">Forgot Password?</a>
-                    </div>
-                    <input type="hidden" name="token" value="<?php echo _token(); ?>" />
-                    <button type="submit" class="btn btn-primary btn-block btn-lg btn-login" name="btn-login">LOG IN
-                    </button>
-                    <p class="login-footer  ">
-                        Copyrights &copy; All Rights Reserved<br><a href="#"><b>
-                                <?php echo $APP_NAME; ?> 2022
-                            </b></a>
-                    </p>
-                </form>
-
+            <div class="alert  alert-info">
+                <h3 class="text-success">
+                    Welcome Buddy !
+                </h3>
             </div>
+            <hr />
+        </div>
+        <br />
+        <br />
+        <br />
+        <div class="row">
+            <h1>FAQ</h1>
+            <br />
+            <?php require('faq.php'); ?>
         </div>
     </div>
     </div>
