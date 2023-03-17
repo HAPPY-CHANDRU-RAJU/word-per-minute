@@ -8,53 +8,6 @@ if (isset($_SESSION['user_session'])) {
     exit;
 }
 
-$error = false;
-
-if (isset($_POST['btn-login'], $_POST['token'])) {
-    if (validate_token($_POST['token'])) {
-
-        $email = trim($_POST['email']);
-        $email = strip_tags($email);
-        $email = htmlspecialchars($email);
-
-        $pass = trim($_POST['pass']);
-        $pass = strip_tags($pass);
-        $pass = htmlspecialchars($pass);
-
-        if (empty($pass) || (strlen($pass) < 6)) {
-            $error = TRUE;
-            $passError = "Please Enter Password <sub> ( Min 6 Characters ) </sub>";
-        }
-
-        if (emailVerify($email)) {
-            $error = TRUE;
-            $emailError = "Please Check E-mail Id";
-        }
-
-        if (!$error) {
-
-            $password = hash('sha256', $pass);
-            $sql = "SELECT * FROM `HRMSCredentials` WHERE `AdminMail`='$email';";
-            $res = $conn->prepare($sql);
-            $res->execute();
-            $row = $res->fetch();
-
-            if ($res->rowCount() == 1 && $row['AdminPassword'] == $password) {
-                if ($row['AdminStatus'] == 'ACTIVE') {
-                    $_SESSION['admin_session'] = $row['AdminID'];
-                    header("Location: " . $HOME_PATH);
-                } else {
-                    $stat = "info";
-                    $errMSG = "Please contact your Admin ";
-                }
-            } else {
-                $stat = "danger";
-                $errMSG = "Incorrect Credentials, Try again...";
-            }
-        }
-    }
-}
-
 ?>
 <!DOCTYPE>
 <html>
@@ -72,8 +25,7 @@ if (isset($_POST['btn-login'], $_POST['token'])) {
         integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous">
     </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
         integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
@@ -84,6 +36,8 @@ if (isset($_POST['btn-login'], $_POST['token'])) {
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js">
     </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
     <script src="assets/js/script.js"></script>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="icon" href="assets/image/logo-sq.png">
@@ -103,58 +57,61 @@ if (isset($_POST['btn-login'], $_POST['token'])) {
     </style>
 </head>
 
-<body style="">
-    <nav class="navbar navbar-light bg-light p-3">
-        <a class="navbar-brand" href="#">
-            <img src="assets/img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="" />
-            Word Per Minute - Calculator
-        </a>
-    </nav>
+<body>
+    <?php require('navbar.php'); ?>
     <div class="row">
         <div class="login-form">
-            <form action="<?php echo $LOGIN_PATH; ?>" method="post">
-                <?php
-                if (isset($errMSG)) {
-                    ?>
-                <div class="form-group">
-                    <div class="alert alert-<?php echo $stat; ?>">
-                        <span class="glyphicon glyphicon-info-sign"></span>
-                        <?php echo $errMSG; ?>
-                    </div>
-                </div>
-                <?php
-                }
-                ?>
+            <form id="login" method="post">
                 <img src="assets/img/logo.png" style="height: 50px;margin-bottom: 15px;" />
-
                 <div class="form-group">
                     <div class="input-group">
-                        <!-- <span class="input-group-addon"><span class="fa fa-envelope"></span></span> -->
                         <input type="email" name="email" class="form-control login-field" placeholder="Your Email"
-                            value="<?php echo $email; ?>" maxlength="40" required />
+                            maxlength="40" required />
                     </div>
-                    <span class="text-danger xs-font">
-                        <?php echo $emailError; ?>
-                    </span>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
-                        <!-- <span class="input-group-addon"><span class="fa fa-lock"></span></span> -->
                         <input type="password" name="pass" class="form-control login-field" placeholder="Your Password"
                             maxlength="15" required />
                     </div>
-                    <span class="text-danger xs-font">
-                        <?php echo $passError; ?>
-                    </span>
                 </div>
-                <button type="button" class="btn btn-lg btn-success btn-login " name="btn-login">LOG IN
+                <button type="submit" class="btn btn-lg btn-success btn-login " name="btn-login">LOG IN
                 </button>
             </form>
 
         </div>
     </div>
 </body>
+<script>
+$("#login").submit(function(e) {
+    e.preventDefault();
+    $.ajax({
+        type: "post",
+        url: endpoint_url,
+        data: {
+            data: {
+                email: e.target[0].value,
+                password: e.target[1].value,
+                function: "login",
+            },
+        },
+        success: function(response) {
+            response = JSON.parse(response);
+            if (response["status"] == "failure") {
+                toastr.error(response["message"]);
+            } else if (response["status"] == "success") {
+                location.reload();
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log("Req: " + XMLHttpRequest.responseText);
+            console.log("Status: " + textStatus);
+            console.log("Error: " + errorThrown);
+        },
+    });
+});
+</script>
 
 </html>
 <?php ob_end_flush(); ?>
