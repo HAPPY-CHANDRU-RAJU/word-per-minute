@@ -65,8 +65,11 @@ $SP_User = $res1->fetch();
         </div>
         <br />
         <br />
+        <div class="">
+        </div>
         <br />
-        <div class="row">
+        <br />
+        <div class="row" style="display: block;">
             <h1>FAQ</h1>
             <br />
             <?php require('faq.php'); ?>
