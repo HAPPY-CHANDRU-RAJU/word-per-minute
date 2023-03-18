@@ -2,6 +2,15 @@ endpoint_url = "http://localhost/wpm-calculator-master/db_function.php";
 
 var tempWords = genWords(50); //generate words upon launch
 var wordLib = genLib(); //a 2D char array version of tempWords
+var wordLen = genWordLen(tempWords);
+
+function genWordLen(words) {
+  var wrdLen = 0;
+  for (var i = 0; i < 50; i++) {
+    wrdLen += words[i].length + 1;
+  }
+  return wrdLen;
+}
 
 function genLib() {
   var charArray = [];
@@ -2017,12 +2026,16 @@ function genParagraph() {
 
   $("#questionSection").empty(); //clear the div
   //generate paragraph
-  $.each(tempWords, function (index, value) {
-    $("#questionSection").append(value + " ");
-  });
+  // $.each(tempWords, function (index, value) {
+  for (var i = 0; i < 49; i++) {
+    $("#questionSection").append(tempWords[i] + " ");
+  }
+  $("#questionSection").append(tempWords[49]);
+  // });
 }
 
 function CallBoth(event) {
+  Errors(event);
   Timer(event);
   if (seconds >= 0) {
     $("#startBtn").css("display", "none");
@@ -2035,17 +2048,14 @@ var seconds = 0; //time elapsed
 var t;
 var stopped = 0;
 function Timer(event) {
-  //clear timer if the reset button is
-  //clicked
-
   //start the timer (called from onkeypress in index.html)
   if (timer == 0 && event.which != 13 && stopped == 0) {
     if (seconds < 60) {
-      $("#timer").html(" <h2> " + seconds + " seconds</h2>");
+      $("#timer").html(" <h2> Time :" + seconds + " seconds</h2>");
     } else {
       minute = parseInt(seconds / 60);
       $("#timer").html(
-        " <h2> " + minute + " minutes " + seconds + " seconds</h2>"
+        " <h2> Time :" + minute + " minutes " + seconds + " seconds</h2>"
       );
     }
     timer = 1;
@@ -2060,11 +2070,146 @@ function Timer(event) {
 function startTime() {
   seconds = seconds + 1;
   if (seconds < 60) {
-    $("#timer").html(" <h2> " + seconds + " seconds</h2>");
+    $("#timer").html(" <h2> Time :" + seconds + " seconds</h2>");
   } else {
     minute = parseInt(seconds / 60);
     $("#timer").html(
-      " <h2> " + minute + " minutes " + parseInt(seconds % 60) + " seconds</h2>"
+      " <h2> Time :" +
+        minute +
+        " minutes " +
+        parseInt(seconds % 60) +
+        " seconds</h2>"
     );
   }
+}
+
+var currWord = 0; //1st index of wordLib to locate a word
+var currIndex = 0; //2nd idnex of wordLib to locate the character index
+var numErrors = 0;
+var space = 0; //declares if the spacebar has to be the next keypress
+var errorLib = []; //array that stores the errors from each word
+var errorArray = []; //array that stores the error at the specific index
+var atEnd = 0; //increases after the end of the text is reached
+var typedEntries = 0; //the number of typed characters (to be used to calculate WPM)
+
+//counts errors while typing
+function Errors(event) {
+  //returns when the user has finished typing the text
+  if (stopped == 1) {
+    return;
+  }
+  //increments atEnd and returns if the user continues to type when they have not
+  //finished the last word
+  if (atEnd > 0) {
+    atEnd++;
+    return;
+  }
+
+  if (space == 1) {
+    if (event.which == 32) {
+      space = 0;
+      return;
+    }
+  }
+
+  //if the user types the correct letter
+  //the index of the char will be marked as correct
+  //otherwise marked incorrect
+  if (String.fromCharCode(event.which) == wordLib[currWord][currIndex]) {
+    errorArray[currIndex] = 0;
+    errorLib[currWord] = errorArray;
+    currIndex++;
+    typedEntries++;
+
+    //once the user has correctly typed the last character
+    //the program is stopped with StopTime
+    if (currWord == 49 && currIndex == wordLib[currWord].length) {
+      //@change 4 to #words - 1
+      StopTime();
+      return;
+    }
+  } else if (String.fromCharCode(event.which) != wordLib[currWord][currIndex]) {
+    errorArray[currIndex] = 1;
+    errorLib[currWord] = errorArray;
+    if (space == 0) {
+      currIndex++;
+    }
+    numErrors++;
+    typedEntries++;
+  }
+
+  //increases currWord and resets currIndex
+  //when the end of a word is reached
+  if (currIndex == wordLib[currWord].length) {
+    currWord++;
+    currIndex = 0;
+    space = 1;
+  }
+}
+
+//separate function to handle backspace events
+function BackSpace(event) {
+  if (event.which == 8) {
+    //returns if a backspace is entered at the start of text
+    if (currIndex == 0 && currWord == 0) {
+      return;
+    }
+    //decreases atEnd and returns when the end has been reached
+    if (atEnd > 0) {
+      atEnd--;
+      return;
+    }
+
+    //if a space is supposed to be pressed
+    //move back a character and set the index to the length of the previous word
+    if (space == 1 && currIndex == 0) {
+      currWord--;
+      currIndex = wordLib[currWord].length;
+      space = 0;
+
+      //if a space is not to be pressed
+      //but the current character is the start of a word
+      //make the next character to be pressed to be the spacebar
+    } else if (space == 0 && currIndex == 0) {
+      space = 1;
+      return;
+    }
+
+    currIndex--;
+
+    //reduces the number of errors if the character that was backspaced was wrong
+    if (errorLib[currWord][currIndex] == 1) {
+      numErrors--;
+    }
+  }
+}
+
+//'stops' the program
+function StopTime() {
+  stopped = 1;
+  clearInterval(t);
+  var netWPM = calcNetWPM();
+  $("h2").replaceWith(
+    "<h2>Your typing speed in net WPM: " +
+      netWPM +
+      " words per minute." +
+      "Errors: " +
+      numErrors +
+      " Time:" +
+      seconds / 60 +
+      " minutes " +
+      (seconds % 60) +
+      " seconds "
+  );
+  $("h2").css("color", "green");
+  seconds = 0;
+  timer = 0;
+}
+
+//calculate the net WPM using the formula provided
+//in http://www.speedtypingonline.com/typing-equations
+function calcNetWPM() {
+  var grossWPM = typedEntries / 5 / (seconds / 10 / 60);
+  var netWPM = grossWPM - numErrors / seconds / 10 / 60;
+  return Math.round(netWPM * 100) / 100;
 }

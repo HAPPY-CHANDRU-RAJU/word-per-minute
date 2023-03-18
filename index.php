@@ -65,7 +65,8 @@ $SP_User = $res1->fetch();
         <br />
         <div class="row">
             <div class="col-sm-12 p-4 my-3" style="background-color: #f8f9fa;box-shadow: 0px 3px 4px 0px black;">
-                <span class="timer-span">Time :<p class="text-danger" id="timer"></p>
+                <span class="timer-span">
+                    <p class="text-danger" id="timer"></p>
                 </span>
                 <button class="btn btn-danger float-right  mx-2" id="resetBtn" name="btn">RESET</button>
                 <button class="btn btn-success float-right mx-2 " id="startBtn" name="btn">START</button>
@@ -96,10 +97,21 @@ $SP_User = $res1->fetch();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <script>
     $("#resetBtn").click(function() {
+
+        currWord = 0;
+        currIndex = 0;
+        numErrors = 0;
+        space = 0;
+        errorLib = [];
+        errorArray = [];
+        seconds = 0;
+        stopped = 0;
+
         $("#typingSection").empty(); //clear the text area
         tempWords = genWords(50); //get new words for tempWords
         wordLib = []; //empty the 2D char array
         wordLib = genLib(); //refill the 2D char array
+        wordLen = genWordLen(tempWords);
         genParagraph(); //display the paragraph
         clearInterval(t);
         $("#timer").empty(); //clear the timer
@@ -124,6 +136,10 @@ $SP_User = $res1->fetch();
         $("#startBtn").css("display", "block");
         $("#stopBtn").css("display", "none");
     })
+
+    // $("#typingSection").bind('keypress', function(e) {
+    //     alert('User clicked on "foo."');
+    // });
     </script>
 </body>
 
