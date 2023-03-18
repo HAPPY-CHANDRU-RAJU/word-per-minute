@@ -64,14 +64,20 @@ $SP_User = $res1->fetch();
         </div>
         <br />
         <div class="row">
-            <div class="col-sm-12 p-4 my-3" style="background-color: gray;">
+            <div class="col-sm-12 p-4 my-3" style="background-color: #f8f9fa;box-shadow: 0px 3px 4px 0px black;">
+                <span class="timer-span">Time :<p class="text-danger" id="timer"></p>
+                </span>
+                <button class="btn btn-danger float-right  mx-2" id="resetBtn" name="btn">RESET</button>
+                <button class="btn btn-success float-right mx-2 " id="startBtn" name="btn">START</button>
+                <button class="btn btn-warning float-right  mx-2" id="stopBtn" style="display: none;"
+                    name="btn">STOP</button>
             </div>
             <div class="col-sm-12" style="display: flex;">
                 <div class="col-sm-6">
                     <div id="questionSection" class="editor"></div>
                 </div>
                 <div class="col-sm-6">
-                    <div id="typingSection" class="editor" contenteditable="true"></div>
+                    <div id="typingSection" class="editor" contenteditable="true" onkeypress="CallBoth(event)"></div>
                 </div>
             </div>
         </div>
@@ -88,6 +94,37 @@ $SP_User = $res1->fetch();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
     <!-- Font Awesome JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+    $("#resetBtn").click(function() {
+        $("#typingSection").empty(); //clear the text area
+        tempWords = genWords(50); //get new words for tempWords
+        wordLib = []; //empty the 2D char array
+        wordLib = genLib(); //refill the 2D char array
+        genParagraph(); //display the paragraph
+        clearInterval(t);
+        $("#timer").empty(); //clear the timer
+        seconds = 0;
+        timer = 0;
+        $("#stopBtn").css("display", "none");
+        $("#startBtn").css("display", "block");
+    });
+
+    $("#startBtn").click(function(event) {
+        CallBoth(event)
+        if (seconds >= 0) {
+            $("#startBtn").css("display", "none");
+            $("#stopBtn").css("display", "block");
+        }
+    })
+
+    $("#stopBtn").click(function(event) {
+        clearInterval(t);
+        seconds = 0;
+        timer = 0;
+        $("#startBtn").css("display", "block");
+        $("#stopBtn").css("display", "none");
+    })
+    </script>
 </body>
 
 </html>

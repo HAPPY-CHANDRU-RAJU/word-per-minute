@@ -99,3 +99,9 @@ a, a:hover{
     overflow: scroll;
     font-size: x-large;
 }
+
+.timer-span{
+    display: inline-flex;
+    font-size: x-large;
+    font-weight: 600;
+}

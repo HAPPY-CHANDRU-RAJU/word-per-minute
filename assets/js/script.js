@@ -1,14 +1,11 @@
-endpoint_url =
-  "http://localhost/wpm-calculator-master/wpm-final/db_function.php";
+endpoint_url = "http://localhost/wpm-calculator-master/db_function.php";
 
 var tempWords = genWords(50); //generate words upon launch
 var wordLib = genLib(); //a 2D char array version of tempWords
 
-//creates a 2D char array of the original tempWords array
 function genLib() {
   var charArray = [];
   for (var i = 0; i < 50; i++) {
-    //@ change 5 to #words
     charArray[i] = tempWords[i].split("");
   }
   return charArray;
@@ -16,35 +13,6 @@ function genLib() {
 
 $(document).ready(function () {
   genParagraph(); //generate paragraph upon launch
-
-  //when reset button is clicked
-  $(".resetBtn").click(function () {
-    //reset every variable
-    currWord = 0;
-    currIndex = 0;
-    numErrors = 0;
-    space = 0;
-    errorLib = [];
-    errorArray = [];
-    seconds = 0;
-    stopped = 0;
-
-    $("#typingSection").val(""); //clear the text area
-
-    tempWords = genWords(50); //get new words for tempWords
-    wordLib = []; //empty the 2D char array
-    wordLib = genLib(); //refill the 2D char array
-
-    genParagraph(); //display the paragraph
-  });
-
-  //display an alert if the document is clicked
-  //while timer is still running
-  $(document).click(function (e) {
-    if (seconds > 0) {
-      $(".alert").show("fast");
-    }
-  });
 });
 
 function genWords(limit) {
@@ -2052,4 +2020,51 @@ function genParagraph() {
   $.each(tempWords, function (index, value) {
     $("#questionSection").append(value + " ");
   });
+}
+
+function CallBoth(event) {
+  Timer(event);
+  if (seconds >= 0) {
+    $("#startBtn").css("display", "none");
+    $("#stopBtn").css("display", "block");
+  }
+}
+
+var timer = 0;
+var seconds = 0; //time elapsed
+var t;
+var stopped = 0;
+function Timer(event) {
+  //clear timer if the reset button is
+  //clicked
+
+  //start the timer (called from onkeypress in index.html)
+  if (timer == 0 && event.which != 13 && stopped == 0) {
+    if (seconds < 60) {
+      $("#timer").html(" <h2> " + seconds + " seconds</h2>");
+    } else {
+      minute = parseInt(seconds / 60);
+      $("#timer").html(
+        " <h2> " + minute + " minutes " + seconds + " seconds</h2>"
+      );
+    }
+    timer = 1;
+    t = setInterval(function () {
+      startTime();
+    }, 1000);
+    timer = 1;
+  }
+}
+
+//timer
+function startTime() {
+  seconds = seconds + 1;
+  if (seconds < 60) {
+    $("#timer").html(" <h2> " + seconds + " seconds</h2>");
+  } else {
+    minute = parseInt(seconds / 60);
+    $("#timer").html(
+      " <h2> " + minute + " minutes " + parseInt(seconds % 60) + " seconds</h2>"
+    );
+  }
 }
