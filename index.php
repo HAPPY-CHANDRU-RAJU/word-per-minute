@@ -64,7 +64,7 @@ $SP_User = $res1->fetch();
         </div>
         <br />
         <div class="row">
-            <div class="col-sm-12 p-4 my-3" style="background-color: #f8f9fa;box-shadow: 0px 3px 4px 0px black;">
+            <div class="col-sm-12 p-4 my-3" style="background-color: #dfe6ee;box-shadow: 0px 3px 4px 0px black;">
                 <span class="timer-span">
                     <p class="text-danger" id="timer"></p>
                 </span>
@@ -130,9 +130,7 @@ $SP_User = $res1->fetch();
     })
 
     $("#stopBtn").click(function(event) {
-        clearInterval(t);
-        seconds = 0;
-        timer = 0;
+        StopTime();
         $("#startBtn").css("display", "block");
         $("#stopBtn").css("display", "none");
     })

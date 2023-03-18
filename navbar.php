@@ -1,4 +1,4 @@
-<nav class="navbar navbar-light bg-light p-3">
+<nav class="navbar navbar-light bg-light p-3" style="background-color: #dfe6ee !important;">
     <a class="navbar-brand" href="index.php">
         <img src="assets/img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="" />
         Word Per Minute - Calculator

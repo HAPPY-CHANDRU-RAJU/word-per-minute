@@ -2204,6 +2204,8 @@ function StopTime() {
   $("h2").css("color", "green");
   seconds = 0;
   timer = 0;
+  $("#startBtn").css("display", "block");
+  $("#stopBtn").css("display", "none");
 }
 
 //calculate the net WPM using the formula provided
