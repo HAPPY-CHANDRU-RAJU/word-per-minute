@@ -1,4 +1,4 @@
-endpoint_url = "http://localhost/wpm-calculator-master/db_function.php";
+endpoint_url = "http://localhost/word-per-minute/db_function.php";
 
 var tempWords = genWords(50); //generate words upon launch
 var wordLib = genLib(); //a 2D char array version of tempWords

@@ -1,1 +1,1 @@
-endpoint_url = "http://localhost/wpm-calculator-master/db_function.php";
+endpoint_url = "http://localhost/word-per-minute/db_function.php";
