@@ -38,7 +38,7 @@ if (isset($_SESSION['user_session'])) {
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-    <!-- <script src="assets/js/script.js"></script> -->
+    <script src="assets/js/url.js"></script>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="icon" href="assets/img/logo-sq.png">
     <title>Login - WPM
