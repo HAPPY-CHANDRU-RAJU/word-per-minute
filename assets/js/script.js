@@ -2051,12 +2051,10 @@ function Timer(event) {
   //start the timer (called from onkeypress in index.html)
   if (timer == 0 && event.which != 13 && stopped == 0) {
     if (seconds < 60) {
-      $("#timer").html(" <h2> Time :" + seconds + " seconds</h2>");
+      $("#timer").html(" Time :" + seconds + " seconds");
     } else {
       minute = parseInt(seconds / 60);
-      $("#timer").html(
-        " <h2> Time :" + minute + " minutes " + seconds + " seconds</h2>"
-      );
+      $("#timer").html("Time :" + minute + " minutes " + seconds + " seconds");
     }
     timer = 1;
     t = setInterval(function () {
@@ -2070,15 +2068,11 @@ function Timer(event) {
 function startTime() {
   seconds = seconds + 1;
   if (seconds < 60) {
-    $("#timer").html(" <h2> Time :" + seconds + " seconds</h2>");
+    $("#timer").html("  Time :" + seconds + " seconds");
   } else {
     minute = parseInt(seconds / 60);
     $("#timer").html(
-      " <h2> Time :" +
-        minute +
-        " minutes " +
-        parseInt(seconds % 60) +
-        " seconds</h2>"
+      "  Time :" + minute + " minutes " + parseInt(seconds % 60) + " seconds"
     );
   }
 }
@@ -2188,34 +2182,36 @@ function BackSpace(event) {
 function StopTime() {
   stopped = 1;
   clearInterval(t);
-  var netWPM = calcNetWPM();
-  if (seconds < 60) {
-    $("p").replaceWith(
-      "<p>Your typing speed in net WPM: " +
-        netWPM +
-        " words per minute." +
-        "     Errors: " +
-        numErrors +
-        "     Time:" +
-        (seconds % 60) +
-        " seconds </p>"
-    );
-  } else if (seconds >= 60) {
-    $("p").replaceWith(
-      "<p>Your typing speed in net WPM: " +
-        netWPM +
-        " words per minute." +
-        "     Errors: " +
-        numErrors +
-        "     Time:" +
-        seconds / 60 +
-        " minutes " +
-        (seconds % 60) +
-        " seconds </p>"
-    );
+  if (document.getElementById("typingSection").innerText?.length >= 40) {
+    var netWPM = calcNetWPM();
+    if (seconds < 60) {
+      $("#timer").text(
+        "Your typing speed in net WPM: " +
+          netWPM +
+          " words per minute." +
+          "     Errors: " +
+          numErrors +
+          "     Time:" +
+          (seconds % 60) +
+          " seconds"
+      );
+    } else if (seconds >= 60) {
+      $("#timer").text(
+        "Your typing speed in net WPM: " +
+          netWPM +
+          " words per minute." +
+          "     Errors: " +
+          numErrors +
+          "     Time:" +
+          seconds / 60 +
+          " minutes " +
+          (seconds % 60) +
+          " seconds "
+      );
+    }
+  } else {
+    $("#timer").text("Something Wents Wrong");
   }
-
-  $("p").css("color", "green");
   seconds = 0;
   timer = 0;
   $("#startBtn").css("display", "block");
