@@ -2189,19 +2189,33 @@ function StopTime() {
   stopped = 1;
   clearInterval(t);
   var netWPM = calcNetWPM();
-  $("h2").replaceWith(
-    "<h2>Your typing speed in net WPM: " +
-      netWPM +
-      " words per minute." +
-      "Errors: " +
-      numErrors +
-      " Time:" +
-      seconds / 60 +
-      " minutes " +
-      (seconds % 60) +
-      " seconds "
-  );
-  $("h2").css("color", "green");
+  if (seconds < 60) {
+    $("p").replaceWith(
+      "<p>Your typing speed in net WPM: " +
+        netWPM +
+        " words per minute." +
+        "     Errors: " +
+        numErrors +
+        "     Time:" +
+        (seconds % 60) +
+        " seconds </p>"
+    );
+  } else if (seconds >= 60) {
+    $("p").replaceWith(
+      "<p>Your typing speed in net WPM: " +
+        netWPM +
+        " words per minute." +
+        "     Errors: " +
+        numErrors +
+        "     Time:" +
+        seconds / 60 +
+        " minutes " +
+        (seconds % 60) +
+        " seconds </p>"
+    );
+  }
+
+  $("p").css("color", "green");
   seconds = 0;
   timer = 0;
   $("#startBtn").css("display", "block");
@@ -2213,5 +2227,5 @@ function StopTime() {
 function calcNetWPM() {
   var grossWPM = typedEntries / 5 / (seconds / 10 / 60);
   var netWPM = grossWPM - numErrors / seconds / 10 / 60;
-  return Math.round(netWPM * 100) / 100;
+  return Math.round(netWPM * 100) / 100 ? Math.round(netWPM * 100) / 100 : 0;
 }

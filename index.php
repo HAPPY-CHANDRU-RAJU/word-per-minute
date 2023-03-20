@@ -27,23 +27,23 @@ $SP_User = $res1->fetch();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
         integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous">
-    </script>
+        </script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
         integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous">
-    </script>
+        </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
         integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
         integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
-    </script>
+        </script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js">
-    </script>
+        </script>
     <script src="assets/js/script.js"></script>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="icon" href="assets/image/logo.png">
@@ -55,11 +55,14 @@ $SP_User = $res1->fetch();
     <br />
     <div class="container">
         <div class="row">
-            <div class="alert  alert-info">
+            <div class="alert col-sm-12 alert-info alert-dismissible  show">
                 <h3 class="text-success">
                     Welcome,
                     <?php echo strtoupper($SP_User["userName"]); ?> !
                 </h3>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
         </div>
         <br />
@@ -68,10 +71,12 @@ $SP_User = $res1->fetch();
                 <span class="timer-span">
                     <p class="text-danger" id="timer"></p>
                 </span>
-                <button class="btn btn-danger float-right  mx-2" id="resetBtn" name="btn">RESET</button>
-                <button class="btn btn-success float-right mx-2 " id="startBtn" name="btn">START</button>
-                <button class="btn btn-warning float-right  mx-2" id="stopBtn" style="display: none;"
-                    name="btn">STOP</button>
+                <button class="btn btn-danger float-right  mx-2" id="resetBtn" name="btn">
+                    <i class="fas fa-sync-alt"></i> RESET</button>
+                <button class="btn btn-success float-right mx-2 " id="startBtn" name="btn"><i
+                        class="far fa-play-circle"></i> START </button>
+                <button class="btn btn-warning float-right  mx-2" id="stopBtn" style="display: none;" name="btn"> <i
+                        class="fas fa-stop-circle"></i>STOP</button>
             </div>
             <div class="col-sm-12" style="display: flex;">
                 <div class="col-sm-6">
@@ -96,48 +101,45 @@ $SP_User = $res1->fetch();
     <!-- Font Awesome JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <script>
-    $("#resetBtn").click(function() {
+        $("#resetBtn").click(function () {
 
-        currWord = 0;
-        currIndex = 0;
-        numErrors = 0;
-        space = 0;
-        errorLib = [];
-        errorArray = [];
-        seconds = 0;
-        stopped = 0;
+            currWord = 0;
+            currIndex = 0;
+            numErrors = 0;
+            space = 0;
+            errorLib = [];
+            errorArray = [];
+            seconds = 0;
+            stopped = 0;
 
-        $("#typingSection").empty(); //clear the text area
-        tempWords = genWords(50); //get new words for tempWords
-        wordLib = []; //empty the 2D char array
-        wordLib = genLib(); //refill the 2D char array
-        wordLen = genWordLen(tempWords);
-        genParagraph(); //display the paragraph
-        clearInterval(t);
-        $("#timer").empty(); //clear the timer
-        seconds = 0;
-        timer = 0;
-        $("#stopBtn").css("display", "none");
-        $("#startBtn").css("display", "block");
-    });
+            $("#typingSection").empty(); //clear the text area
+            tempWords = genWords(50); //get new words for tempWords
+            wordLib = []; //empty the 2D char array
+            wordLib = genLib(); //refill the 2D char array
+            wordLen = genWordLen(tempWords);
+            genParagraph(); //display the paragraph
+            clearInterval(t);
+            $("#timer").empty(""); //clear the timer
+            seconds = 0;
+            timer = 0;
+            document.getElementByClassName("timer").innerHTML = "";
+            $("#stopBtn").css("display", "none");
+            $("#startBtn").css("display", "block");
+        });
 
-    $("#startBtn").click(function(event) {
-        CallBoth(event)
-        if (seconds >= 0) {
-            $("#startBtn").css("display", "none");
-            $("#stopBtn").css("display", "block");
-        }
-    })
+        $("#startBtn").click(function (event) {
+            CallBoth(event)
+            if (seconds >= 0) {
+                $("#startBtn").css("display", "none");
+                $("#stopBtn").css("display", "block");
+            }
+        })
 
-    $("#stopBtn").click(function(event) {
-        StopTime();
-        $("#startBtn").css("display", "block");
-        $("#stopBtn").css("display", "none");
-    })
-
-    // $("#typingSection").bind('keypress', function(e) {
-    //     alert('User clicked on "foo."');
-    // });
+        $("#stopBtn").click(function (event) {
+            StopTime();
+            $("#startBtn").css("display", "block");
+            $("#stopBtn").css("display", "none");
+        })
     </script>
 </body>
 
