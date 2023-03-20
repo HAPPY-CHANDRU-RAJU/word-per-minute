@@ -46,7 +46,7 @@ $SP_User = $res1->fetch();
         </script>
     <script src="assets/js/script.js"></script>
     <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="icon" href="assets/image/logo.png">
+    <link rel="icon" href="assets/img/logo.png">
     <title>WPM - Home Page</title>
 </head>
 
@@ -65,7 +65,6 @@ $SP_User = $res1->fetch();
                 </button>
             </div>
         </div>
-        <br />
         <div class="row">
             <div class="col-sm-12 p-4 my-3" style="background-color: #dfe6ee;box-shadow: 0px 3px 4px 0px black;">
                 <span class="timer-span">
@@ -80,10 +79,14 @@ $SP_User = $res1->fetch();
             </div>
             <div class="col-sm-12" style="display: flex;">
                 <div class="col-sm-6">
-                    <div id="questionSection" class="editor"></div>
+                    <label></label>
+                    <div id="questionSection" class="editor question"></div>
                 </div>
                 <div class="col-sm-6">
-                    <div id="typingSection" class="editor" contenteditable="true" onkeypress="CallBoth(event)"></div>
+                    <label class="font-weight-bold"> Type Below <i class="fas fa-hand-point-down"></i></label>
+                    <div id="typingSection" class="editor typing" contenteditable="true" onkeypress="CallBoth(event)"
+                        style="">
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,7 +105,7 @@ $SP_User = $res1->fetch();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <script>
         $("#resetBtn").click(function () {
-
+            StopTime();
             currWord = 0;
             currIndex = 0;
             numErrors = 0;
@@ -118,7 +121,6 @@ $SP_User = $res1->fetch();
             wordLib = genLib(); //refill the 2D char array
             wordLen = genWordLen(tempWords);
             genParagraph(); //display the paragraph
-            clearInterval(t);
             $("#timer").empty(""); //clear the timer
             seconds = 0;
             timer = 0;

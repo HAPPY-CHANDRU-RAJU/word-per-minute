@@ -95,10 +95,18 @@ a, a:hover{
 .editor {
     height: 45vh;
     min-height: 45vh;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     overflow: scroll;
     font-size: x-large;
     padding: 12px;
+}
+
+.question{
+    font-weight: 600;
+}
+
+.typing{
+    box-shadow: 4px 7px 10px 0px gray;
 }
 
 .timer-span{
