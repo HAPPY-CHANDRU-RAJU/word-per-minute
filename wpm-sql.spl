@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 15, 2023 at 06:48 PM
+-- Generation Time: Mar 20, 2023 at 05:28 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -40,8 +40,8 @@ CREATE TABLE `userDetails` (
 --
 
 INSERT INTO `userDetails` (`userId`, `userName`, `userEmail`, `userPassword`, `userDOC`) VALUES
-('0b5ab692b60004d9843f4d7b01056ff482d4f147d', 'test', 'test@wpm.com', 'sdsads', '2023-03-15 22:35:36'),
-('c61651096fe0ee2426d207dcfb2450c82d4f147d', 'admin', 'admin@wpm.com', 'sdsads', '2023-03-15 22:35:14');
+('0b5ab692b60004d9843f4d7b01056ff482d4f147d', 'test', 'test@wpm.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '2023-03-15 22:35:36'),
+('c61651096fe0ee2426d207dcfb2450c82d4f147d', 'admin', 'admin@wpm.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '2023-03-15 22:35:14');
 
 -- --------------------------------------------------------
 
